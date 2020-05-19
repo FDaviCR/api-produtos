@@ -36,3 +36,18 @@ app.get('/produtos/:id', (req, res) => {
         })
     }  
 });
+
+app.post('/produtos', (req, res) => {
+    let produto = req.body;
+    connection.query('insert into produtos (produto,valor,unidade,ativo)values(?,?,?,?)',[produto.produto,produto.valor,produto.unidade,produto.ativo], (err, data) =>{
+        if(!err){
+            const response = {
+                status: 200,
+                mensagem: 'Produto inserido com sucesso!'}
+            res.send(response);
+
+        }else{
+            res.send(err);
+        }
+    })
+});
