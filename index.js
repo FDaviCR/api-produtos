@@ -45,9 +45,26 @@ app.post('/produtos', (req, res) => {
                 status: 200,
                 mensagem: 'Produto inserido com sucesso!'}
             res.send(response);
-
         }else{
             res.send(err);
         }
     })
 });
+
+app.delete('/produtos/:id', (req, res) => { 
+    if(isNaN(req.params.id)){
+        res.sendStatus(400);
+    }else{
+        connection.query('delete from produtos where id = ?',[req.params.id], (err, data) => {
+            if(!err){
+                const response = {
+                    status: 200,
+                    mensagem: 'Produto deletado com sucesso!'}
+                res.send(response);
+            }else{
+                res.send(err);
+            }
+        })
+    }  
+});
+
