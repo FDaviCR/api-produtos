@@ -68,3 +68,20 @@ app.delete('/produtos/:id', (req, res) => {
     }  
 });
 
+app.put('/produtos/:id', (req, res) => { 
+    if(isNaN(req.params.id)){
+        res.sendStatus(400);
+    }else{
+        let produto = req.body;
+        connection.query('update produtos set produto=?,valor=?,unidade=?,ativo=? where id=?',[produto.produto,produto.valor,produto.unidade,produto.ativo,req.params.id], (err, data) =>{
+            if(!err){
+                const response = {
+                    status: 200,
+                    mensagem: 'Produto atualizado com sucesso!'}
+                res.send(response);
+            }else{
+                res.send(err);
+            }
+        })
+    }  
+});
