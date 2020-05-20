@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <hr>
+    <ul id="produtos"></ul>
+    <hr>
+</head>
+<body>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    axios.get('http://localhost:3000/produtos').then(response => {
+        var produtos = response.data;
+        var list = document.getElementById("produtos");
+
+        produtos.forEach(produto => {
+            var item = document.createElement("li");
+            item.innerHTML = produto.id +" - "+ produto.produto +" - "+ produto.valor;
+            list.appendChild(item);
+        });
+    }).catch(error =>{
+        console.log(error);
+    });
+</script>
+</html>
