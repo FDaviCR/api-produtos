@@ -16,7 +16,17 @@
         <option value=1>Ativo</option>
         <option value=0>Desligado</option>
     </select><br>
-    <button type="button" onclick="createProduct()">Criar</button>
+    <hr>
+    <h4>Editar Produto</h4>
+    <input type="number" name="idEdit" id="idEdit" placeholder="ID" readonly><br>
+    <input type="text" id="produtoEdit" name="produto" placeholder="Produto"><br>
+    <input type="number" id="valorEdit" name="valor" placeholder="Valor"><br>
+    <input type="text" id="unidadeEdit" name="unidade" placeholder="Unidade"><br>
+    <select type="select" id="ativoEdit" name="ativo">
+        <option value=1>Ativo</option>
+        <option value=0>Desligado</option>
+    </select><br>
+    <button type="button" onclick="updateProduct()">Editar</button>
 </head>
 <body>
 
@@ -47,13 +57,86 @@
         });
     }
 
+    function deleteProduct(ListItem){
+        var id = ListItem.getAttribute("data-id");
+        axios.delete('http://localhost:3000/produtos/'+id).then(response => {
+            alert("Produto deletado!");
+        }).catch(err =>{
+            console.log(err)
+        });
+    }
+
+    function loadForm(ListItem){
+        var id = ListItem.getAttribute("data-id");
+        var produto = ListItem.getAttribute("data-produto");
+        var valor = ListItem.getAttribute("data-valor");
+        var unidade = ListItem.getAttribute("data-unidade");
+        var ativo = ListItem.getAttribute("data-ativo");
+
+        document.getElementById("idEdit").value = id;
+        document.getElementById("produtoEdit").value = produto;
+        document.getElementById("valorEdit").value = valor;
+        document.getElementById("unidadeEdit").value = unidade;
+        document.getElementById("ativoEdit").value = ativo;
+;    }
+
+    function updateProduct(ListItem){
+        var idInput = document.getElementById("idEdit");
+        var produtoInput = document.getElementById('produtoEdit');
+        var valorInput = document.getElementById('valorEdit');
+        var unidadeInput = document.getElementById('unidadeEdit');
+        var ativoInput = document.getElementById('ativoEdit');
+
+        var produto = {
+            produto: produtoInput.value,
+            valor: valorInput.value,
+            unidade: unidadeInput.value,
+            ativo: ativoInput.value
+        }
+
+        var id = idInput.value;
+
+        axios.put("http://localhost:3000/produtos/"+id,produto).then(response => {
+            if (response.status == 200) {
+                alert('Produto atualizado!');
+            }else{
+                console.log(response);
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
     axios.get('http://localhost:3000/produtos').then(response => {
         var produtos = response.data;
         var list = document.getElementById("produtos");
 
         produtos.forEach(produto => {
             var item = document.createElement("li");
+
+            item.setAttribute("data-id", produto.id);
+            item.setAttribute("data-produto", produto.produto);
+            item.setAttribute("data-valor", produto.valor);
+            item.setAttribute("data-unidade", produto.unidade);
+            item.setAttribute("data-ativo", produto.ativo);
+
             item.innerHTML = produto.id +" - "+ produto.produto +" - "+ produto.valor;
+            
+            var deleteBtn = document.createElement("button");
+            deleteBtn.innerHTML = "Deletar";
+            deleteBtn.addEventListener("click", function(){
+                deleteProduct(item)
+            })
+
+            var editBtn = document.createElement("button");
+            editBtn.innerHTML = "Editar"
+            editBtn.addEventListener("click", function(){
+                loadForm(item);
+            })
+
+            item.appendChild(deleteBtn);
+            item.appendChild(editBtn);
+
             list.appendChild(item);
         });
     }).catch(error =>{
