@@ -89,4 +89,19 @@ app.put('/produtos/:id', (req, res) => {
     }  
 });
 
-
+app.post('/users', (req, res) => {
+    var user = DB.users.find(u => u.login == login);
+    
+    if(user != undefined){
+        if(user.password == password){
+            res.statusCode = 200;
+            res.json({token: "Token Falso!"});
+        }else{
+            res.statusCode = 401;
+            res.json({err: "Credenciais inválidas!"});
+        }
+    }else{
+        res.statusCode = 404;
+        res.json({token: "Login inexistente!"});
+    }
+});
