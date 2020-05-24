@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+
+const JWTSecret = 'YouShallNotPass';
 
 app.use(cors());
 
@@ -91,12 +94,22 @@ app.put('/produtos/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     let login = req.body;
+    
     connection.query('select * from users where login = ?',[login.login], (err, data) => {
-        console.log(data[0].login);
-        if(data[0].login != undefined){
+        let logs = data[0];
+
+        if(logs != undefined){
             if(data[0].password == login.password){
-                res.status(200);
-                res.json({token: "Token Falso!"});
+
+                jwt.sign({id: data[0].id, login: data[0].login},JWTSecret,{expiresIn:'2h'},(err, token) =>{
+                    if(err){
+                        res.status(400);
+                        res.json({err:"Falha interna!"});
+                    }else{
+                        res.status(200);
+                        res.json({token:token});
+                    }
+                })
             }else{
                 res.status(401);
                 res.json({err: "Credenciais inválidas!"});
