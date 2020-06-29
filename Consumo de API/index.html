@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: black;color: white;">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produtos</title>
+    <hr>
+    <h4>Login</h4>
+    <input type="text" id="login" name="login" placeholder="Teste"><br>
+    <input type="text" id="password" name="password" placeholder="*****"><br>
+    <button onclick="login()">Entrar</button>
     <hr>
     <h4>Lista de Produtos</h4>
     <ul id="produtos"></ul>
@@ -16,6 +21,7 @@
         <option value=1>Ativo</option>
         <option value=0>Desligado</option>
     </select><br>
+    <button type="button" onclick="createProduct()">Adicionar</button>
     <hr>
     <h4>Editar Produto</h4>
     <input type="number" name="idEdit" id="idEdit" placeholder="ID" readonly><br>
@@ -33,6 +39,33 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+
+    var axiosConfig = {
+        headers: {
+            Authorization: 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibG9naW4iOiJkYXZpIiwiaWF0IjoxNTkzMzk1MTk2LCJleHAiOjE1OTM0MDk1OTZ9.Q-KCf-OSNb9-VHYQ8aCAE0-TS4uMxhX_QgfizrBdgt0'
+        }
+    }
+
+    function login(){
+        var loginField = document.getElementById('login');
+        var passwordField = document.getElementById('password');
+
+        var login = loginField.value;
+        var password = passwordField.value;
+
+        console.log(login+' '+password);
+
+        axios.post("http://localhost:3000/users",{
+            login,
+            password
+        }).then(res => {
+            console.log(res.data);
+            alert("Logado!");
+        }).catch(err => {
+            alert(err);
+        });
+    }
+
     function createProduct(){
         var produtoInput = document.getElementById('produto');
         var valorInput = document.getElementById('valor');
@@ -107,7 +140,7 @@
         });
     }
 
-    axios.get('http://localhost:3000/produtos').then(response => {
+    axios.get('http://localhost:3000/produtos', axiosConfig).then(response => {
         var produtos = response.data;
         var list = document.getElementById("produtos");
 

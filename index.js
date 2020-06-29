@@ -125,7 +125,7 @@ app.post('/users', (req, res) => {
         if(logs != undefined){
             if(data[0].password == login.password){
 
-                jwt.sign({id: data[0].id, login: data[0].login},JWTSecret,{expiresIn:'2h'},(err, token) =>{
+                jwt.sign({id: data[0].id, login: data[0].login},JWTSecret,{expiresIn:'4h'},(err, token) =>{
                     if(err){
                         res.status(400);
                         res.json({err:"Falha interna!"});
