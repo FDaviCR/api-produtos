@@ -1,41 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" style="background-color: black;color: white;">
+<html lang="pt">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produtos</title>
-    <hr>
-    <h4>Login</h4>
-    <input type="text" id="login" name="login" placeholder="Teste"><br>
-    <input type="text" id="password" name="password" placeholder="*****"><br>
-    <button onclick="login()">Entrar</button>
-    <hr>
-    <h4>Lista de Produtos</h4>
-    <ul id="produtos"></ul>
-    <hr>
-    <h4>Novo Produto</h4>
-    <input type="text" id="produto" name="produto" placeholder="Produto"><br>
-    <input type="number" id="valor" name="valor" placeholder="Valor"><br>
-    <input type="text" id="unidade" name="unidade" placeholder="Unidade"><br>
-    <select type="select" id="ativo" name="ativo">
-        <option value=1>Ativo</option>
-        <option value=0>Desligado</option>
-    </select><br>
-    <button type="button" onclick="createProduct()">Adicionar</button>
-    <hr>
-    <h4>Editar Produto</h4>
-    <input type="number" name="idEdit" id="idEdit" placeholder="ID" readonly><br>
-    <input type="text" id="produtoEdit" name="produto" placeholder="Produto"><br>
-    <input type="number" id="valorEdit" name="valor" placeholder="Valor"><br>
-    <input type="text" id="unidadeEdit" name="unidade" placeholder="Unidade"><br>
-    <select type="select" id="ativoEdit" name="ativo">
-        <option value=1>Ativo</option>
-        <option value=0>Desligado</option>
-    </select><br>
-    <button type="button" onclick="updateProduct()">Editar</button>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <link rel="stylesheet" href="../dist/css/style.css">
 </head>
 <body>
-
+    <div class="container">
+        <h1>Produtos</h1>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <canvas id="chartUnidade"></canvas>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chartValor"></canvas>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="form-container">
+            <h4>Login</h4>
+                <input type="text" id="login" name="login" placeholder="Teste"><br>
+                <input type="text" id="password" name="password" placeholder="*****"><br>
+                <button onclick="login()">Entrar</button>
+            <hr>
+        
+            <h4>Lista de Produtos</h4>
+                <ul id="produtos"></ul>
+            <hr>
+            <h4>Novo Produto</h4>
+                <input type="text" id="produto" name="produto" placeholder="Produto"><br>
+                <input type="number" id="valor" name="valor" placeholder="Valor"><br>
+                <input type="text" id="unidade" name="unidade" placeholder="Unidade"><br>
+                <select type="select" id="ativo" name="ativo">
+                    <option value=1>Ativo</option>
+                    <option value=0>Desligado</option>
+                </select><br>
+                <button type="button" onclick="createProduct()">Adicionar</button>
+            <hr>
+            <h4>Editar Produto</h4>
+                <input type="number" name="idEdit" id="idEdit" placeholder="ID" readonly><br>
+                <input type="text" id="produtoEdit" name="produto" placeholder="Produto"><br>
+                <input type="number" id="valorEdit" name="valor" placeholder="Valor"><br>
+                <input type="text" id="unidadeEdit" name="unidade" placeholder="Unidade"><br>
+                <select type="select" id="ativoEdit" name="ativo">
+                    <option value=1>Ativo</option>
+                    <option value=0>Desligado</option>
+                </select><br>
+                <button type="button" onclick="updateProduct()">Editar</button>
+            <hr>
+        </div>    
+    </div>
+    <script src="../Consumo de API/graficos/Charts.js"></script>
+    
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
@@ -153,7 +179,7 @@
             item.setAttribute("data-unidade", produto.unidade);
             item.setAttribute("data-ativo", produto.ativo);
 
-            item.innerHTML = produto.id +" - "+ produto.produto +" - "+ produto.valor;
+            item.innerHTML = produto.id +" - "+ produto.produto +" - "+ produto.valor+ " <=> ";
             
             var deleteBtn = document.createElement("button");
             deleteBtn.innerHTML = "Deletar";
