@@ -14,7 +14,7 @@ class Charts{
         return axios.get("http://localhost:3000/produtos", axiosConfig).then(res => {
             this.prepararDados(res.data);
         }).catch(err => {
-            alert("Algo errado...", err);
+            alert("Faça o login!");
         });
     }
 

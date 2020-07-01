@@ -32,6 +32,7 @@
                 <input type="text" id="login" name="login" placeholder="Teste"><br>
                 <input type="text" id="password" name="password" placeholder="*****"><br>
                 <button onclick="login()">Entrar</button>
+                <button onclick="deslogar()">Sair</button>
             <hr>
         
             <h4>Lista de Produtos</h4>
@@ -41,6 +42,7 @@
                 <input type="text" id="produto" name="produto" placeholder="Produto"><br>
                 <input type="number" id="valor" name="valor" placeholder="Valor"><br>
                 <input type="text" id="unidade" name="unidade" placeholder="Unidade"><br>
+                <input type="number" id="quantidade" name="quantidade" placeholder="Quantidade"><br>
                 <select type="select" id="ativo" name="ativo">
                     <option value=1>Ativo</option>
                     <option value=0>Desligado</option>
@@ -52,6 +54,7 @@
                 <input type="text" id="produtoEdit" name="produto" placeholder="Produto"><br>
                 <input type="number" id="valorEdit" name="valor" placeholder="Valor"><br>
                 <input type="text" id="unidadeEdit" name="unidade" placeholder="Unidade"><br>
+                <input type="number" id="quantidadeEdit" name="quantidade" placeholder="Quantidade"><br>
                 <select type="select" id="ativoEdit" name="ativo">
                     <option value=1>Ativo</option>
                     <option value=0>Desligado</option>
@@ -87,21 +90,30 @@
         }).then(res => {
             localStorage.setItem("token", res.data.token);
             axiosConfig.headers.Authorization = "Bearer " + localStorage.getItem("token");
+            window.location.reload();
         }).catch(err => {
             alert(err);
         });
+    }
+
+    function deslogar(){
+        localStorage.setItem("token", "");
+        axiosConfig.headers.Authorization = "Bearer " + localStorage.getItem("token");
+        window.location.reload();
     }
 
     function createProduct(){
         var produtoInput = document.getElementById('produto');
         var valorInput = document.getElementById('valor');
         var unidadeInput = document.getElementById('unidade');
+        var quantidadeInput = document.getElementById('quantidade');
         var ativoInput = document.getElementById('ativo');
 
         var produto = {
             produto: produtoInput.value,
             valor: valorInput.value,
             unidade: unidadeInput.value,
+            quantidade: quantidadeInput.value,
             ativo: ativoInput.value
         }
 
@@ -130,12 +142,14 @@
         var produto = ListItem.getAttribute("data-produto");
         var valor = ListItem.getAttribute("data-valor");
         var unidade = ListItem.getAttribute("data-unidade");
+        var quantidade = ListItem.getAttribute("data-quantidade");
         var ativo = ListItem.getAttribute("data-ativo");
 
         document.getElementById("idEdit").value = id;
         document.getElementById("produtoEdit").value = produto;
         document.getElementById("valorEdit").value = valor;
         document.getElementById("unidadeEdit").value = unidade;
+        document.getElementById("quantidadeEdit").value = quantidade;
         document.getElementById("ativoEdit").value = ativo;
     }
 
@@ -144,12 +158,14 @@
         var produtoInput = document.getElementById('produtoEdit');
         var valorInput = document.getElementById('valorEdit');
         var unidadeInput = document.getElementById('unidadeEdit');
+        var quantidadeInput = document.getElementById('quantidadeEdit');
         var ativoInput = document.getElementById('ativoEdit');
 
         var produto = {
             produto: produtoInput.value,
             valor: valorInput.value,
             unidade: unidadeInput.value,
+            quantidade: quantidadeInput.value,
             ativo: ativoInput.value
         }
 
@@ -177,6 +193,7 @@
             item.setAttribute("data-produto", produto.produto);
             item.setAttribute("data-valor", produto.valor);
             item.setAttribute("data-unidade", produto.unidade);
+            item.setAttribute("data-quantidade", produto.quantidade);
             item.setAttribute("data-ativo", produto.ativo);
 
             item.innerHTML = produto.id +" - "+ produto.produto +" - "+ produto.valor+ " <=> ";

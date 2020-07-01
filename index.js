@@ -69,7 +69,8 @@ app.get('/produtos/:id', (req, res) => {
 
 app.post('/produtos', (req, res) => {
     let produto = req.body;
-    connection.query('insert into produtos (produto,valor,unidade,ativo)values(?,?,?,?)',[produto.produto,produto.valor,produto.unidade,produto.ativo], (err, data) =>{
+    connection.query('insert into produtos (produto,valor,unidade,quantidade,ativo)values(?,?,?,?,?)',
+    [produto.produto,produto.valor,produto.unidade,produto.quantidade,produto.ativo], (err, data) =>{
         if(!err){
             const response = {
                 status: 200,
@@ -103,7 +104,8 @@ app.put('/produtos/:id', (req, res) => {
         res.sendStatus(400);
     }else{
         let produto = req.body;
-        connection.query('update produtos set produto=?,valor=?,unidade=?,ativo=? where id=?',[produto.produto,produto.valor,produto.unidade,produto.ativo,req.params.id], (err, data) =>{
+        connection.query('update produtos set produto=?,valor=?,unidade=?,quantidade=?,ativo=? where id=?',
+        [produto.produto,produto.valor,produto.unidade,produto.quantidade,produto.ativo,req.params.id], (err, data) =>{
             if(!err){
                 const response = {
                     status: 200,
